@@ -3,7 +3,6 @@
 require 'open-uri'
 
 vim_dir = File.expand_path("~/.vim")
-bundle_dir = "#{vim_dir}/bundletest"
 
 # Set a comment stripping function - from http://rosettacode.org/wiki/Strip_comments_from_a_string#Ruby
 class String
@@ -32,6 +31,7 @@ unless File.exists?(pathogen_file_path)
 end
 
 # get the rest of the plugins as bundles
+bundle_dir = "#{vim_dir}/bundle"
 open("vim-plugins") do |f|
   f.each_line do |plugin|
     plugin = plugin.strip_comment.strip
