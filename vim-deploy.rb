@@ -1,5 +1,10 @@
 #!/usr/bin/ruby
 
+require 'open-uri'
+
+vim_dir = File.expand_path("~/.vim")
+bundle_dir = "#{vim_dir}/bundletest"
+
 # Set a comment stripping function - from http://rosettacode.org/wiki/Strip_comments_from_a_string#Ruby
 class String
   def strip_comment( markers = ['#',';'] )
@@ -13,16 +18,33 @@ class String
 end
 
 # get my vimrc from github repo
+vimrc_file_path = File.expand_path("~/.vimrc")
+open("https://raw.githubusercontent.com/damienjbyrne/dotfiles/master/vimrc") do |fin|
+  open(vimrc_file_path, 'w') { |fout| fout.write(fin.read) }
+end
 
-# install pathogen
+# install pathogen if it's not there already
+pathogen_file_path = "#{vim_dir}/autoload/pathogen.vim"
+unless File.exists?(pathogen_file_path)
+  open("https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim") do |pathin|
+    open("#{pathogen_file_path}", 'w') { |path_file| path_file.write(pathin.read) }
+  end
+end
 
 # get the rest of the plugins as bundles
 open("vim-plugins") do |f|
   f.each_line do |plugin|
     plugin = plugin.strip_comment.strip
     if plugin != ''
-      puts "Cloning #{plugin} to .vim/bundle"
-      exec "git clone https://github.com/#{plugin} ~/.vim/bundletest/#{plugin.split('/')[-1]}"
+      plugin_dir = "#{bundle_dir}/#{plugin.split('/')[-1]}"
+      puts "*** checking for #{plugin_dir}"
+      if Dir.exist?(plugin_dir)
+        puts "Updating #{plugin} in #{plugin_dir}"
+        system "git -C #{plugin_dir} pull"
+      else
+        puts "Cloning #{plugin} to #{plugin_dir}"
+        system "git clone https://github.com/#{plugin} #{plugin_dir}"
+      end
     end
   end
 end

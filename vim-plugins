@@ -1,3 +1,5 @@
 # list of vim plugins on github to cycle through and checkout into .vim/bundles
 bling/vim-airline # very nice status bar
+tpope/vim-fugitive
+altercation/vim-colors-solarized
 
