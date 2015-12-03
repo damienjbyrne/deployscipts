@@ -3,6 +3,7 @@
 require 'open-uri'
 
 vim_dir = File.expand_path("~/.vim")
+autoload_dir = "#{vim_dir}/autoload"
 
 # Set a comment stripping function - from http://rosettacode.org/wiki/Strip_comments_from_a_string#Ruby
 class String
@@ -22,8 +23,12 @@ open("https://raw.githubusercontent.com/damienjbyrne/dotfiles/master/vimrc") do 
   open(vimrc_file_path, 'w') { |fout| fout.write(fin.read) }
 end
 
+# start setting things up in ~/.vim
+Dir.mkdir(vim_dir) unless File.exists?(vim_dir)
+
 # install pathogen if it's not there already
-pathogen_file_path = "#{vim_dir}/autoload/pathogen.vim"
+Dir.mkdir(autoload_dir) unless File.exists?(autoload_dir)
+pathogen_file_path = "#{autoload_dir}/pathogen.vim"
 unless File.exists?(pathogen_file_path)
   open("https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim") do |pathin|
     open("#{pathogen_file_path}", 'w') { |path_file| path_file.write(pathin.read) }
