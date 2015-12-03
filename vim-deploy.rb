@@ -30,8 +30,8 @@ Dir.mkdir(vim_dir) unless File.exists?(vim_dir)
 Dir.mkdir(autoload_dir) unless File.exists?(autoload_dir)
 pathogen_file_path = "#{autoload_dir}/pathogen.vim"
 unless File.exists?(pathogen_file_path)
-  open("https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim") do |pathin|
-    open("#{pathogen_file_path}", 'w') { |path_file| path_file.write(pathin.read) }
+  open("https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim") do |path_in|
+    open("#{pathogen_file_path}", 'w') { |path_file| path_file.write(path_in.read) }
   end
 end
 
@@ -54,3 +54,6 @@ open("vim-plugins") do |f|
   end
 end
 
+# Set up the powerline fonts
+# 1) Get fonts from GitHub
+# 2) Run the fonts installer
